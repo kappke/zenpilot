@@ -28,7 +28,13 @@ command that starts it.
 
 **Linux:** popups use `zenity` (or `kdialog`) and `notify-send`, so install one of them. Without
 any, zenpilot can't ask you, so allow sites ahead of time with `zenpilot allow <site>`.
-Claude Desktop has no Linux app, so use Claude Code.
+Claude Desktop has no Linux app, so use Claude Code. On NixOS (or with Nix), run it from the
+flake, which brings those tools along:
+
+```sh
+claude mcp add zenpilot -- nix run github:beSaif/zenpilot
+nix run github:beSaif/zenpilot -- setup
+```
 
 
 **Claude Desktop:** download `zenpilot-<version>.mcpb` from the
@@ -150,6 +156,7 @@ once `upload_dirs` isn't empty, and it takes effect the next time Zen starts.
 ```sh
 git clone https://github.com/beSaif/zenpilot.git && cd zenpilot
 uv sync && uv run zenpilot setup     # points Claude at your clone
+# On NixOS: `nix develop` first, for Python, uv, ruff and zenity. Run `ruff` directly, not `uv run ruff`.
 uv run pytest -m "not integration"   # unit tests
 uv run pytest                        # all tests, needs Zen running (zenpilot launch)
 ZENPILOT_TEST_PORT=9333 uv run pytest   # against a second Zen on a test profile

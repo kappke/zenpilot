@@ -178,6 +178,8 @@ def test_server_command(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, "prefix", str(tmp_path / "cache/archive-v0/abc"))
     monkeypatch.setattr(cli.shutil, "which", lambda name: f"/opt/bin/{name}")
     assert cli.server_command() == ["/opt/bin/uvx", "zenpilot"]
+    monkeypatch.setenv("ZENPILOT_COMMAND", "/nix/store/x-zenpilot/bin/zenpilot")  # the flake's wrapper
+    assert cli.server_command() == ["/nix/store/x-zenpilot/bin/zenpilot"]
 
 
 def test_register_desktop_keeps_other_settings(tmp_path):

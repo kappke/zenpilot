@@ -26,6 +26,8 @@ CLAUDE_CODE_CONFIG = Path("~/.claude.json").expanduser()
 
 def server_command() -> list[str]:
     """The command MCP clients should run to start this zenpilot."""
+    if wrapper := os.environ.get("ZENPILOT_COMMAND"):  # set by the Nix flake's wrapper
+        return [wrapper]
     cache = Path(os.environ.get("UV_CACHE_DIR", "~/.cache/uv")).expanduser().resolve()
     if Path(sys.prefix).resolve().is_relative_to(cache):  # `uvx zenpilot`: this environment is temporary
         uvx = shutil.which("uvx")
